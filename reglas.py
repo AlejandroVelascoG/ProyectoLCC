@@ -39,10 +39,9 @@ for i in range (0,2):
 		barcos.append(Ver[b]+8)
 
 	++i
-
-print (barcos)
-
+	barcosting=map(str,barcos)
 
 
 
+print (barcosting)
 
