@@ -1,9 +1,5 @@
 # coding=utf-8
 
-# Este código ubica los dos barcos en el tablero
-
-import random
-
 # Posiciones inciales barcos horizontales:
 
 Hor = [1, 2, 5, 6, 9, 10, 13, 14]
@@ -12,38 +8,43 @@ Hor = [1, 2, 5, 6, 9, 10, 13, 14]
 
 Ver = [1, 2, 3, 4, 5, 6, 7, 8]
 
-barcos = [] # lista que guardará las posiciones de los barcos
+barcos = [] # lista de todos los barcos posibles
+	
+for j in Hor: # mete a barcos todos los barcos horizontales posibles
+	bar_hor = []
+	bar_hor.append(j)
+	bar_hor.append((j)+1)
+	bar_hor.append((j)+2)
+	barcos.append(bar_hor)
 
-i = 0
+for k in Ver: # mete a barcos todos los barcos horizontales verticales
+	bar_ver = []
+	bar_ver.append(k)
+	bar_ver.append((k)+4)
+	bar_ver.append((k)+8)
+	barcos.append(bar_ver)
 
-for i in range (0,2):
+tablero = []
+for i in range (1,17):
+	tablero.append(str(i))
 
-	a = random.uniform(0,1) # número que determina si un barco es horizontal o vertical
-	b = random.randint(0,7) # número con el que se elige una posición inicial
+conjunciones = '' # Para ir guardando las disyunciones de trios de literales
+inicial = True # Para inicializar la primera conjuncion
 
-	if a<=0.5:	# Si a<=0.5, el barco será horizontal
+for p in barcos:
+    aux1 = [x for x in  barcos if x != p] # Todos los barcos excpeto p
+    # print "aux1: ", aux1
+    for q in aux1:
+            literal = str(q[0]) + str(q[1]) + str(q[2]) + str(p[0]) + str(p[1]) + str(p[2]) + 'Y' + 'Y' + 'Y' + 'Y' + 'Y'
+            lista_barco = [str(q[0]), str(q[1]), str(q[2]), str(p[0]), str(p[1]), str(p[2])]
+            aux2 = [x + '-' for x in tablero if x not in lista_barco]
+            for k in aux2:
+                literal = k + literal + 'Y'
+            # print "Literal: ", literal
+            if inicial: # Inicializar la primera conjuncion
+                conjunciones = literal
+                inicial = False
+            else:
+                conjunciones = literal + conjunciones + 'O'
 
-		barcos.append(Hor[b])
-		barcos.append(Hor[b]+1)
-		barcos.append(Hor[b]+2)
-
-	else: # si a>0.5, el barco será vertical:
-		
-		barcos.append(Ver[b])
-		barcos.append(Ver[b]+4)
-		barcos.append(Ver[b]+8)
-
-	++i
-
-	barcos=map(str,barcos) # pasa las posiciones de los barcos a string
-
-tablero = [] # lista que guardará el tablero
-
-for i in range(1,17):
-		if str(i) not in barcos: 		 # si una posición del tablero no está en la lista de las posiciones de los barcos
-			tablero.append('-' + str(i)) # marca esa posición con la negación para indicar que ahí no hay nada 
-		else:
-			tablero.append(str(i)) 		 # guarda la posición del barco en el tablero
-print (barcos)
-print (tablero)
-
+print (conjunciones)
