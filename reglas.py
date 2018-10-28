@@ -1,5 +1,12 @@
 # coding=utf-8
 
+import Tableaux as T
+
+letrasProposicionales = []
+for i in range (1,17):
+	letrasProposicionales.append(str(i))
+
+
 # Posiciones inciales barcos horizontales:
 
 Hor = [1, 2, 5, 6, 9, 10, 13, 14]
@@ -47,4 +54,5 @@ for p in barcos:
             else:
                 conjunciones = literal + conjunciones + 'O'
 
-print (conjunciones)
+A = T.StringtoTree(conjunciones, letrasProposicionales)
+print (T.Inorder(A))
