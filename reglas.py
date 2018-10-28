@@ -4,11 +4,6 @@
 
 import random
 
-LetProp = []
-for i in range (1, 16):
-	LetProp.append(i)
-
-
 # Posiciones inciales barcos horizontales:
 
 Hor = [1, 2, 5, 6, 9, 10, 13, 14]
@@ -39,9 +34,16 @@ for i in range (0,2):
 		barcos.append(Ver[b]+8)
 
 	++i
-	barcosting=map(str,barcos)
 
+	barcos=map(str,barcos) # pasa las posiciones de los barcos a string
 
+tablero = [] # lista que guardará el tablero
 
-print (barcosting)
+for i in range(1,17):
+		if str(i) not in barcos: 		 # si una posición del tablero no está en la lista de las posiciones de los barcos
+			tablero.append('-' + str(i)) # marca esa posición con la negación para indicar que ahí no hay nada 
+		else:
+			tablero.append(str(i)) 		 # guarda la posición del barco en el tablero
+print (barcos)
+print (tablero)
 
