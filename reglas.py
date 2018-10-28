@@ -54,5 +54,22 @@ for p in barcos:
             else:
                 conjunciones = literal + conjunciones + 'O'
 
+conjunciones = '4-5-6-7-YYY123YY>' + conjunciones + 'Y'
+conjunciones = '1-5-7-8-7-YYY234YY>' + conjunciones + 'Y'
+conjunciones = '1-2-3-4-8-9-10-11-YYY567YY>' + conjunciones + 'Y'
+conjunciones = '1-2-3-4-5-10-11-12-YYY678YY>' + conjunciones + 'Y'
+conjunciones = '5-6-7-12-13-14-15-16YYY91011YY>' + conjunciones + 'Y'
+conjunciones = '6-7-8-9-13-14-15-YYY101112YY>' + conjunciones + 'Y'
+conjunciones = '10-11-12-16-YYY131415YY>' + conjunciones + 'Y'
+conjunciones = '9-10-11-13-YYY141516YY>' + conjunciones + 'Y'
+conjunciones = '2-6-10-13-YYY159YY>' + conjunciones + 'Y'
+conjunciones = '1-5-9-14-3-7-11-YYY2610YY>' + conjunciones + 'Y'
+conjunciones = '2-6-10-15-14-8-12-YYY3711YY>' + conjunciones + 'Y'
+conjunciones = '3-7-11-16-YYY4812YY>' + conjunciones + 'Y'
+conjunciones = '1-6-10-14-YYY5913YY>' + conjunciones + 'Y'
+conjunciones = '5-9-13-2-7-11-15-YYY61014YY>' + conjunciones + 'Y'
+conjunciones = '6-10-14-3-8-12-16-YYY71115YY>' + conjunciones + 'Y'
+conjunciones = '4-7-11-15-YYY81216YY>' + conjunciones + 'Y'
+
 A = T.StringtoTree(conjunciones, letrasProposicionales)
 print (T.Inorder(A))
