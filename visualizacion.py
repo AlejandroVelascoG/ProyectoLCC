@@ -1,23 +1,23 @@
 #-*-coding: utf-8-*-
+# Edgar Andrade, Septiembre 2018
 
-# David Moreno y Alejandro Velasco
+# Visualizacion de tableros de ajedrez 4x4 a partir de
+# una lista de literales. Cada literal representa una casilla;
+# el literal es positivo sii hay un caballo en la casilla.
 
-# El problema a resolver es cómo disponer dos barcos en un tablero 4x4 de tal 
-# forma que no sean contiguos. Se usarán literales para visualizar el problema:
-# el literal es positivo sii hay una porción de un barco ocupando la casilla.
-# Las porciones de barco están representadas con círculos. El tamaño de un 
-# barco es 3 (si hay tres literales positivos contiguos, hay un barco allí).
-
-# En esta visualización, se obtienen dos tableros: el primero es un ejemplo
-# de un tablero satisfactorio; el segundo es un ejemplo de un tablero fallido.
-
-# Formato de la entrada: - las letras proposionales seran: 1, ..., 16;
+# Formato de la entrada: - las letras proposionales seran: 1, ..., 9;
 #                        - solo se aceptan literales (ej. 1, ~2, 3, ~4, etc.)
 # Requiere tambien un numero natural, para servir de indice del tablero,
 # toda vez que puede solicitarse visualizar varios tableros.
 
 # Salida: archivo tablero_%i.png, donde %i es un numero natural
 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib.offsetbox import AnnotationBbox, OffsetImage
+import os
 
 def dibujar_tablero(f, n):
     # Visualiza un tablero dada una formula f
@@ -61,17 +61,17 @@ def dibujar_tablero(f, n):
     # Creo las líneas del tablero
     for j in range(4):
         locacion = j * step
-        # Crea lineas horizontales en el rectangulo
+        # Crea linea horizontal en el rectangulo
         tangulos.append(patches.Rectangle(*[(0, step + locacion), 1, 0.005],\
                 facecolor='black'))
-        # Crea lineas verticales en el rectangulo
+        # Crea linea vertical en el rectangulo
         tangulos.append(patches.Rectangle(*[(step + locacion, 0), 0.005, 1],\
                 facecolor='black'))
 
     for t in tangulos:
         axes.add_patch(t)
 
-    # Cargando imagen de círculo
+    # Cargando imagen de caballo
     arr_img = plt.imread("circulo.png", format='png')
     imagebox = OffsetImage(arr_img, zoom=0.02)
     imagebox.image.axes = axes
@@ -99,32 +99,31 @@ def dibujar_tablero(f, n):
     direcciones[16] = [0.87, 0.12]
 
     for l in f:
-        if '~' not in l:
+        if '-' not in l:
+            if l=='A':
+                l=10
+            elif l=='B':
+                l=11
+            elif l=='C':
+                l=12
+            elif l=='D':
+                l=13
+            elif l=='E':
+                l=14
+            elif l=='F':
+                l=15
+            elif l=='G':
+                l=16
             ab = AnnotationBbox(imagebox, direcciones[int(l)], frameon=False)
             axes.add_artist(ab)
 
     # plt.show()
-    fig.savefig("tablero_" + str(n) + ".png")
-
-
-#################
-# importando paquetes para dibujar
-print "Importando paquetes..."
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from matplotlib.offsetbox import AnnotationBbox, OffsetImage
-import csv
-from sys import argv
-print "Listo!"
-
-script, data_archivo = argv
-
-with open(data_archivo) as csv_file:
-    data = csv.reader(csv_file, delimiter=',')
-    contador = 1
-    for l in data:
-        print "Dibujando tablero:", l
-        dibujar_tablero(l, contador)
-        contador += 1
-
-csv_file.close()
+    d = 'Soluciones/'
+    try:
+        os.makedirs(d)
+        print "Creando " + d
+    except OSError:
+        if not os.path.isdir(d):
+            raise
+    fig.savefig(d + "tablero_" + str(n) + ".png")
+    print "Imagenes creadas! Verificar la carpeta " + d
