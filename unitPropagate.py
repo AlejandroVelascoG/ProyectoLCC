@@ -24,7 +24,7 @@ def deleteClause(conjuntoClausulas, lit, letrasProp):
 	for clause in conjuntoClausulas:
 		if lit in clause:
 			conjuntoClausulas.remove(clause)
-"""def literalpuro(conjuntoClausulas):
+"""def literalpuro(conjuntoClausulas,letrasProp):
     for i in range(len(letrasProp)):
         
         if letrasPro[i] in conjunto and complemento(letrasPro[i], letrasProp) in conjunto:
@@ -51,9 +51,13 @@ def DPLL(conjuntoClausulas, interp, letrasProp):
 
 		return "satisfacible", interp
 	else:
-		clause = conjuntoClausulas[0]
+                #while(conjuntoClausulas[x for x in range(len(conjuntoClausulas)+1)!=[]])
+                
+		clause = conjuntoClausulas[0][0]
 		interp[clause[0]] = 'V'
 		deleteClause(conjuntoClausulas, clause[0], letrasProp)
+		#literalpuro(conjuntoClausulas,letrasProp)
+		
 #	
 #		deleteClause(conjuntoClausulas, clause[0], letrasProp)
 
@@ -77,3 +81,4 @@ print('-----------------------------------')
 
 
 #print(DPLL(conj2, int2, letrasProp))
+
