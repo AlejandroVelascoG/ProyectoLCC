@@ -1,11 +1,9 @@
 #-*-coding: utf-8-*-
 
-# David Moreno y Alejandro Velasco
-# código para resolver el problema de los barcos 
-
 print "Importando paquetes..."
 from timeit import default_timer as timer
-import Tableaux as T
+import cnf as T
+import DPLL as solve
 print "Importados!"
 
 # Guardo el tiempo al comenzar el procedimiento
@@ -132,44 +130,76 @@ for p in barcos:
 # ocupa la casilla diagonal a la posición de otro barco, NO cuenta como
 # contacto
 
-#conjunciones = '4-5-6-7-YYY123YY>' + conjunciones + 'Y'
-#conjunciones = '1-5-6-7-8-YYY234YY>' + conjunciones + 'Y'
-conjunciones = '2-A-O567YY>' + conjunciones + 'Y'
-conjunciones = '3-B-O678YY>' + conjunciones + 'Y'
-conjunciones = '6-E-O9ABYY>' + conjunciones + 'Y'
-conjunciones = '7-F-OABCYY>' + conjunciones + 'Y'
-conjunciones = '9-A-B-C-G-YYYDEFYY>' + conjunciones + 'Y'
-#conjunciones = '9-A-B-C-D-YYYEFGYY>' + conjunciones + 'Y'
-#conjunciones = '2-6-A-D-E-YYY159YY>' + conjunciones + 'Y'
-conjunciones = '5-7-O26AYY>' + conjunciones + 'Y'
-conjunciones = '6-8-O37BYY>' + conjunciones + 'Y'
-#conjunciones = '3-7-B-G-YYY48CYY>' + conjunciones + 'Y'
-#conjunciones = '1-6-A-E-YYY59DYY>' + conjunciones + 'Y'
-conjunciones = '9-B-O6AEYY>' + conjunciones + 'Y'
-conjunciones = 'A-C-O7BFYY>' + conjunciones + 'Y'
-#conjunciones = '4-7-B-F-YYY8CGYY>' + conjunciones + 'Y'
-
+# conjunciones = '4-5-6-7-YYY123YY>' + conjunciones + 'Y'
+# conjunciones = '1-5-6-7-8-YYY234YY>' + conjunciones + 'Y'
+# conjunciones = '1-2-3-8-9-A-B-YYY567YY>' + conjunciones + 'Y'
+# conjunciones = '2-3-4-5-A-B-C-YYY678YY>' + conjunciones + 'Y'
+# conjunciones = '5-6-7-C-D-E-F-YYY9ABYY>' + conjunciones + 'Y'
+# conjunciones = '6-7-8-9-E-F-G-YYYABCYY>' + conjunciones + 'Y'
+# conjunciones = '9-A-B-C-G-YYYDEFYY>' + conjunciones + 'Y'
+# conjunciones = '9-A-B-C-D-YYYEFGYY>' + conjunciones + 'Y'
+# conjunciones = '2-6-A-D-E-YYY159YY>' + conjunciones + 'Y'
+# conjunciones = '1-5-9-E-3-7-B-YYY26AYY>' + conjunciones + 'Y'
+# conjunciones = '2-6-A-F-4-8-C-YYY37BYY>' + conjunciones + 'Y'
+# conjunciones = '3-7-B-G-YYY48CYY>' + conjunciones + 'Y'
+# conjunciones = '1-6-A-E-YYY59DYY>' + conjunciones + 'Y'
+# conjunciones = '5-9-D-2-7-B-F-YYY6AEYY>' + conjunciones + 'Y'
+# conjunciones = '6-A-E-3-8-C-G-YYY7BFYY>' + conjunciones + 'Y'
+# conjunciones = '4-7-B-F-YYY8CGYY>' + conjunciones + 'Y'
 
 A = T.StringtoTree(conjunciones, letrasProposicionales)
-print "Formula: ", T.Inorder(A)
+#print "Formula: ", T.Inorder(A)
 
-lista_hojas = [[A]] # Inicializa la lista de hojas
+print(u"Trabajando con la fórmula:\n ", T.Inorder(A))
 
-OK = '' # El tableau regresa Satisfacible o Insatisfacible
-interpretaciones = [] # lista de lista de literales que hacen verdadera lista_hojas
+A = T.quitarDobleNegacion(A)
 
-OK, INTS = T.Tableaux(lista_hojas, letrasProposicionales)
+print(u"La fórmula sin dobles negaciones es:\n ", T.Inorder(A))
 
-print "Tableau terminado!"
-# Guardo el tiempo al terminar el procedimiento
-end = timer()
-print u"El procedimiento demoró: ", end - start
+A = T.reemplazarImplicacion(A)
 
-if OK == 'Satisfacible':
-    if len(INTS) == 0:
-        print u"Error: la lista de interpretaciones está vacía"
+print(u"La fórmula reemplazando implicaciones es:\n ", T.Inorder(A))
+
+A = T.quitarDobleNegacion(A)
+
+print(u"La fórmula sin dobles negaciones es:\n ", T.Inorder(A))
+
+OK = True
+while OK:
+	aux1 = T.Inorder(A)
+	print("Se analiza: ", aux1)
+	B = T.deMorgan(A)
+	B = T.quitarDobleNegacion(B)
+	aux2 = T.Inorder(B)
+	print("Se obtuvo : ", aux2)
+	if  aux1 != aux2:
+		print(u"Se aplicó deMorgan")
+		OK = True
+		A = B
+	else:
+		print(u"No se aplicó deMorgan")
+		OK = False
+
+OK = True
+while OK:
+	OK, A = T.aplicaDistributiva(A)
+
+conjuntoClausulas = T.formaClausal(A)
+
+print "Formula en CNF: ", T.Inorder(A)
+
+conjuntoClausulas = T.formaClausal(A)
+
+print("Conjunto de disyunciones de literales:\n ", conjuntoClausulas)
+
+interpretacion = {}
+
+if solve.DPLL(conjuntoClausulas, interpretacion, letrasProposicionales) == ("la formula es satisfacible con la interpretacion", interpretacion):
+	INTS = list(interpretacion.values())
+	if len(INTS) == 0:
+       print u"Error: la lista de interpretaciones está vacía"
     else:
-        print "Guardando interpretaciones en archivo..."
+    	print "Guardando interpretaciones en archivo..."
         import csv
         archivo = 'tableros_automatico.csv'
         with open(archivo, 'w') as output:

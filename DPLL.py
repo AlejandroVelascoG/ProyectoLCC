@@ -60,9 +60,11 @@ def DPLL(conjuntoClausulas, interp, letrasProp):
 		intaux = copy.deepcopy(interp) # crea copia de la interpretación que recibió el algoritmo
 		if firstClause[0] in letrasProp: # si el primer literal de la primera cláusula es una letra proposicional
 			intaux[firstClause[0]] = 'V' # extiende la nueva interpretación añadiendo esa letra con V
+			conjuntoAux.remove(conjuntoAux[0])
 			deleteClause(conjuntoAux, firstClause[0], letrasProp) # borra todas las cláusulas que tienen el literal y los complementos de las restantes
 		elif firstClause[0] not in letrasProp: # si es la negación de una letra
 			intaux[complemento(firstClause[0], letrasProp)] = 'F' # extiende la nueva interpretación añadiendo la letra con F
+			conjuntoAux.remove(conjuntoAux[0])
 			deleteClause(conjuntoAux, firstClause[0], letrasProp) # borra todas las cláusulas que tienen el literal y los complementos de las restantes
 			print(conjuntoAux)
 		
@@ -73,7 +75,7 @@ def DPLL(conjuntoClausulas, interp, letrasProp):
 
 		return DPLL(conjuntoAux, intaux, letrasProp)
 
-		if DPLL(conjuntoAux, intaux, letrasProp) == ("insatisfacible", intaux):
+		if DPLL(conjuntoAux, intaux, letrasProp) == ("la formula es insatisfacible con la interpretacion", intaux):
 
 			conjuntoAux2 = copy.deepcopy(conjuntoClausulas)  # crea una copia profunda del conjunto de cláusulas
 			firstClause2 = conjuntoAux2[0] # marca la primera cláusula en la copia
@@ -90,33 +92,32 @@ def DPLL(conjuntoClausulas, interp, letrasProp):
 			print("Y la interptetación:")
 			print(intaux2)
 
+			conjuntoAux2.remove(conjuntoAux2[0])
 			deleteClause(conjuntoAux2, complemento(firstClause[0], letrasProp), letrasProp)	
-
-			print('La fórmula es:')	
 
 			return DPLL(conjuntoAux2, intaux2, letrasProp)	
 
 
-letrasProp = ['p', 'q', 'r', 's', 'v', 'u']
-int1 = {}
-int2 = {}
-int3 = {}
-ejemplo = [['p', '-q', 'r'], ['-p', '-q', '-r'], ['-p', '-q', 'r'], ['p', '-q', '-r']]
-ejemplo2 = [['-q', '-r'], ['-q', 'r']]
-ejemplo3 = [['p', 'q'], ['p', '-q'], ['-p', 'q'], ['-p', '-r']]
-prim = ejemplo2[0]
-lit = prim[0]
-sat = [['p', 'q'], ['r', 's']]
-insat = [['p', 'q'], ['-p', 'q'], ['-q']]
-print(DPLL(sat, int1, letrasProp))
-print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-print(DPLL(insat, int2, letrasProp))
-print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-print(DPLL(ejemplo3, int3, letrasProp))
+# letrasProp = ['p', 'q', 'r', 's', 'v', 'u']
+# int1 = {}
+# int2 = {}
+# int3 = {}
+# ejemplo = [['p', '-q', 'r'], ['-p', '-q', '-r'], ['-p', '-q', 'r'], ['p', '-q', '-r']]
+# ejemplo2 = [['-q', '-r'], ['-q', 'r']]
+# ejemplo3 = [['p', 'q'], ['p', '-q'], ['-p', 'q'], ['-p', '-r']]
+# prim = ejemplo2[0]
+# lit = prim[0]
+# sat = [['p', 'q'], ['r', 's']]
+# insat = [['p', 'q'], ['-p', 'q'], ['-q']]
+# print(DPLL(sat, int1, letrasProp))
+# print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+# print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+# print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+# print(DPLL(insat, int2, letrasProp))
+# print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+# print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+# print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+# print(DPLL(ejemplo3, int3, letrasProp))
 
 
 	
