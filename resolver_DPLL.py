@@ -126,26 +126,24 @@ for p in barcos:
             else:
                 conjunciones = literal + conjunciones + 'O'
 
-# Regla 2: no debe haber contacto entre barcos. Si una posición de un barco
-# ocupa la casilla diagonal a la posición de otro barco, NO cuenta como
-# contacto
+# Regla 2: no debe haber barcos superpuestos
 
-# conjunciones = '4-5-6-7-YYY123YY>' + conjunciones + 'Y'
-# conjunciones = '1-5-6-7-8-YYY234YY>' + conjunciones + 'Y'
-# conjunciones = '1-2-3-8-9-A-B-YYY567YY>' + conjunciones + 'Y'
-# conjunciones = '2-3-4-5-A-B-C-YYY678YY>' + conjunciones + 'Y'
-# conjunciones = '5-6-7-C-D-E-F-YYY9ABYY>' + conjunciones + 'Y'
-# conjunciones = '6-7-8-9-E-F-G-YYYABCYY>' + conjunciones + 'Y'
-# conjunciones = '9-A-B-C-G-YYYDEFYY>' + conjunciones + 'Y'
-# conjunciones = '9-A-B-C-D-YYYEFGYY>' + conjunciones + 'Y'
-# conjunciones = '2-6-A-D-E-YYY159YY>' + conjunciones + 'Y'
-# conjunciones = '1-5-9-E-3-7-B-YYY26AYY>' + conjunciones + 'Y'
-# conjunciones = '2-6-A-F-4-8-C-YYY37BYY>' + conjunciones + 'Y'
-# conjunciones = '3-7-B-G-YYY48CYY>' + conjunciones + 'Y'
-# conjunciones = '1-6-A-E-YYY59DYY>' + conjunciones + 'Y'
-# conjunciones = '5-9-D-2-7-B-F-YYY6AEYY>' + conjunciones + 'Y'
-# conjunciones = '6-A-E-3-8-C-G-YYY7BFYY>' + conjunciones + 'Y'
-# conjunciones = '4-7-B-F-YYY8CGYY>' + conjunciones + 'Y'
+#conjunciones = '4-5-6-7-YYY123YY>' + conjunciones + 'Y'
+#conjunciones = '1-5-6-7-8-YYY234YY>' + conjunciones + 'Y'
+conjunciones = '2-A-O567YY>' + conjunciones + 'Y'
+conjunciones = '3-B-O678YY>' + conjunciones + 'Y'
+conjunciones = '6-E-O9ABYY>' + conjunciones + 'Y'
+conjunciones = '7-F-OABCYY>' + conjunciones + 'Y'
+conjunciones = '9-A-B-C-G-YYYDEFYY>' + conjunciones + 'Y'
+#conjunciones = '9-A-B-C-D-YYYEFGYY>' + conjunciones + 'Y'
+#conjunciones = '2-6-A-D-E-YYY159YY>' + conjunciones + 'Y'
+conjunciones = '5-7-O26AYY>' + conjunciones + 'Y'
+conjunciones = '6-8-O37BYY>' + conjunciones + 'Y'
+#conjunciones = '3-7-B-G-YYY48CYY>' + conjunciones + 'Y'
+#conjunciones = '1-6-A-E-YYY59DYY>' + conjunciones + 'Y'
+conjunciones = '9-B-O6AEYY>' + conjunciones + 'Y'
+conjunciones = 'A-C-O7BFYY>' + conjunciones + 'Y'
+#conjunciones = '4-7-B-F-YYY8CGYY>' + conjunciones + 'Y'
 
 A = T.StringtoTree(conjunciones, letrasProposicionales)
 #print "Formula: ", T.Inorder(A)
@@ -194,8 +192,15 @@ print("Conjunto de disyunciones de literales:\n ", conjuntoClausulas)
 
 interpretacion = {}
 
-if solve.DPLL(conjuntoClausulas, interpretacion, letrasProposicionales) == ("la formula es satisfacible con la interpretacion", interpretacion):
-	INTS = list(interpretacion.values())
+OK, interpretacion = solve.DPLL(conjuntoClausulas, interpretacion, letrasProposicionales) 
+
+print "DPLL terminado"
+# Guardo el tiempo al terminar el procedimiento
+end = timer()
+print u"El procedimiento demoró: ", end - start
+
+if OK == 'la formula es satisfacible con la interpretacion':
+    INTS = list(interpretacion.values())
 	if len(INTS) == 0:
        print u"Error: la lista de interpretaciones está vacía"
     else:
