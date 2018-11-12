@@ -477,26 +477,8 @@ def DPLL(conjuntoClausulas, interp, letrasProp):
 # ocupa la casilla diagonal a la posición de otro barco, NO cuenta como
 # contacto
 
-conjunciones = '4-5-6-7-YYY123YY>' + conjunciones + 'Y'
-conjunciones = '1-5-6-7-8-YYY234YY>' + conjunciones + 'Y'
-conjunciones = '1-2-3-8-9-A-B-YYY567YY>' + conjunciones + 'Y'
-conjunciones = '2-3-4-5-A-B-C-YYY678YY>' + conjunciones + 'Y'
-conjunciones = '5-6-7-C-D-E-F-YYY9ABYY>' + conjunciones + 'Y'
-conjunciones = '6-7-8-9-E-F-G-YYYABCYY>' + conjunciones + 'Y'
-conjunciones = '9-A-B-C-G-YYYDEFYY>' + conjunciones + 'Y'
-conjunciones = '9-A-B-C-D-YYYEFGYY>' + conjunciones + 'Y'
-conjunciones = '2-6-A-D-E-YYY159YY>' + conjunciones + 'Y'
-conjunciones = '1-5-9-E-3-7-B-YYY26AYY>' + conjunciones + 'Y'
-conjunciones = '2-6-A-F-4-8-C-YYY37BYY>' + conjunciones + 'Y'
-conjunciones = '3-7-B-G-YYY48CYY>' + conjunciones + 'Y'
-conjunciones = '1-6-A-E-YYY59DYY>' + conjunciones + 'Y'
-conjunciones = '5-9-D-2-7-B-F-YYY6AEYY>' + conjunciones + 'Y'
-conjunciones = '6-A-E-3-8-C-G-YYY7BFYY>' + conjunciones + 'Y'
-conjunciones = '4-7-B-F-YYY8CGYY>' + conjunciones + 'Y'
 
     
-
-letrasProposicionales = ['p', 'q', 'r']
 
 # cadena = 'q--p->--'
 # cadena = 'qpY-'
@@ -558,6 +540,35 @@ while OK:
 conjuntoClausulas = formaClausal(A)
 
 print("Conjunto de disyunciones de literales:\n ", conjuntoClausulas)
+sat=''
+
+int1 = {}
+sat,interpretacionesVerdaderas=DPLL(conjuntoClausulas,int1,letrasProposicionales)
+print "DPLL Terminado"
+end timer()
+print u"El procedimiento demoró: ", end - start
+
+if sat == 'la formula es satisfacible con la interpretacion':
+    if len(interp) == 0:
+        print u"Error: la lista de interpretaciones está vacía"
+    else:
+        print "Guardando interpretaciones en archivo..."
+        import csv
+        archivo = 'tableros_automatico.csv'
+        with open(archivo, 'w') as output:
+            writer = csv.writer(output, lineterminator='\n')
+            writer.writerows(interp)
+
+        print "Interpretaciones guardadas  en " + archivo
+
+        import visualizacion as V
+        contador = 1
+        for i in interp:
+            print "Trabajando con literales: ", i
+            V.dibujar_tablero(i,contador)
+            contador += 1
+
+print "FIN"
 
 
 		    
@@ -585,3 +596,4 @@ print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°�
 print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
 print(DPLL(ejemplo3, int3, letrasProp),"Ejemplo 3")
 '''
+
